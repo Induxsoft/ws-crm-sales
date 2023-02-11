@@ -1,0 +1,141 @@
+Notas generales y lluvia de ideas
+=====================================
+
+Pipeline para venta de autos
+
+1-Contactar al interesado (stage)
+2-Mostrar la gama de vehículos (stage)
+3-Realizar prueba de manejo
+4-Tramitar crédito
+5-Facturar la unidad
+
+
+Pipeline de induxsoft
+1.- contactar clientes
+2.- 
+3.- instalacion del producto
+
+
+pipeline uvm
+
+1-prospeccion (llamar a los leads obtenidos para ver si les late chocolate)
+2-oferta (te damos una beca si te vienes)
+3-seguimiento (te llamo todos los días)
+4-Inscripción
+
+
+api (servicio)
+
+
+manager
+{
+	key int (clave primaria numérica)
+	code text (Código alfanumérico)
+	name text(150)
+}
+
+agent
+{
+	key int (clave primaria numérica)
+	code text (Código alfanumérico)
+	name text(150)
+}
+customer
+{
+	key int (clave primaria numérica)
+	code text (Código alfanumérico)
+	name text(150)
+}
+lead
+{
+	subject  (Cadena con el asunto o título del prospecto)
+	name  (Cadena con el nombre del prospecto)
+	email  (Cadena con el correo electrónico del prospecto)
+	recived  (Cadena de fecha y hora en formato yyyy-MM-ddThh:mm:ss que corresponde a le fecha y hora de recepción del prospecto)
+	next_contact  (Cadena de fecha y hora en formato yyyy-MM-ddThh:mm:ss que corresponde a le fecha y hora del próximo contacto programado)
+	agent_id  (Cadena con el Id del perfil del agente (colaborador) al que está asignado el prospecto)
+	lead_status  (Numérico con la clave del estado en el que está el prospecto.)
+	remarks  (Cadena con los comentarios o mensaje del prospecto)
+	color  (Numérico que indica el color asignado al prospecto (0-Blanco, 1-Rojo, 2-Verde, 3-Azul, 4-Morado y 5-Amarillo))
+	phone  (Cadena con el número telefónico del prospecto)
+	organization  (Cadena con el nombre de la empresa u organización del prospecto)
+	position  (Cadena con el nombre del puesto del prospecto en la organización)
+}
+
+contact
+{
+	name varchar
+	phone
+	email
+	domicilio
+	organizations [organization]
+}
+
+organization
+{
+	name varchar
+	email 
+	phone
+	contacts[contact]
+}
+
+contact_organization
+{
+	ref_contact int
+	ref_organization int
+}
+
+
+pipeline
+{
+	name 
+	stages []
+	probability (bool) 
+}
+
+stage
+{
+	ref_pipeline int
+	name
+	probability
+	stuck_in_days int - Si es cero o nulo no hay días estancados establecidos
+}
+
+deal
+{
+	name varchar
+	ref_pipeline int
+	ref_stage int
+	probability int
+	ref_organization
+	ref_contact
+	ref_contact2
+	ref_contact3
+	ref_contact4
+	ref_contact5
+	amount decimal
+	status int
+	currency varchar
+	ref_owner int???????
+}
+
+
+status
+[
+	0-Prospect ->Siempre el estado inicial de un trato
+	1-Negotiating
+	----- Anteriores no pueden eliminarse
+	2-Cold
+	3-Hot
+	---- Reservados
+	100-Win
+	101-Lose
+]
+
+quote
+event
+event_type
+note
+sku
+coupon
+coupon_type
