@@ -1,0 +1,51 @@
+#include "ddm.dkh"
+model "CRM Sales"
+{
+    abstract "devkronTable"
+    {
+        @"sys_pk" int key autoincrement
+        @"sys_guid" string(32) unique required
+        @"sys_dtcreated" datetime required
+        @"sys_timestamp" datetime required
+        @"sys_recver" int
+        @"sys_deleted" bool
+        @"sys_lock" int
+        @"sys_info" string(32)
+        @"sys_user" string(32)
+    }
+
+    entity "agente" : "devkronTable"
+    {
+        @"codigo" string(15) required unique
+        @"nombre" string(150) required unique
+        @"iuser" int ref:"tuser" ["sys_pk"] unique
+    }
+
+    entity "contacto" : "devkronTable"
+    {
+        @"nombre" string(150) unique required
+        @"telefono" string(15)
+        @"correo" string(100)
+    }
+
+    entity "organizacion" : "devkronTable"
+    {
+        @"nombre" string(150) unique required
+    }
+
+    entity "sales_pipeline_stage" : "devkronTable"
+    {
+        @"ref_pipeline" ref:"sales_pipeline" required
+        @"name" string(50) required
+        @"probability" decimal(4,1)
+        @"stuck_in_days" int
+    }
+
+    entity "sales_pipeline" : "devkronTable"
+    {
+        @"name" string(50)
+        @"probability" bool
+    }
+
+    
+}
