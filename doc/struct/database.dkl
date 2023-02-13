@@ -21,9 +21,9 @@ model "CRM Sales"
         @"iuser" int ref:"tuser" ["sys_pk"] unique
     }
 
-    entity "contacto" : "devkronTable"
+    entity "persona" : "devkronTable"
     {
-        @"nombre" string(150) unique required
+        @"nombre" string(150) required
         @"telefono" string(15)
         @"correo" string(100)
     }
@@ -36,6 +36,7 @@ model "CRM Sales"
     entity "sales_pipeline_stage" : "devkronTable"
     {
         @"ref_pipeline" ref:"sales_pipeline" required
+        @"sequence" int required    //El número de secuencia de las etapas en el pipeline
         @"name" string(50) required
         @"probability" decimal(4,1)
         @"stuck_in_days" int
