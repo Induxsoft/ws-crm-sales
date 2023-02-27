@@ -1,0 +1,7 @@
+GET : / > /index.dkl
+*: /crm/sales/pipeline/{pipeline_id?}/ > /_services/index.dkl
+*: /crm/sales/pipeline/{pipeline_id}/stages/{stage_id?}/ > /_services/index.dkl
+GET: /_css/style.css > /_app/_css/style.css
+GET: /_js/model.js > /_app/_js/model.js
+GET: /_js/views.js > /_app/_js/views.js
+GET: /_js/controller.js > /_app/_js/controller.js

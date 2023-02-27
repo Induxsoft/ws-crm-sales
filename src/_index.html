@@ -1,0 +1,309 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<meta name="format-detection" content="telephone=no" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="google" content="notranslate" />
+		<meta name="importmap-type" content="systemjs-importmap" />
+		<link rel="icon" href="https://cdn.sjc-1.pipedriveassets.com/froot/icons/favicon.ico" type="image/x-icon">
+
+		<title>test1</title>
+		
+		<style>
+			#skeleton {
+				position: absolute;
+				display: flex;
+				width: 100vw;
+				height: 100vh;
+				min-width: 1024px;
+				left: 0;
+				top: 0;
+				z-index: -1;
+			}
+			#skeleton .left {
+				background-color: #211c52;
+				width: 56px;
+				user-select: none;
+			}
+			#skeleton .right {
+				display: grid;
+				grid-template-rows: 56px calc(100vh - 56px);
+				grid-template-columns: 100%;
+				overflow: hidden;
+				flex: 1 1 0%;
+			}
+			#skeleton .circle {
+				font-size: 13px;
+				height: 32px;
+				width: 32px;
+				background: #edeef0;
+				box-sizing: border-box;
+				vertical-align: top;
+				align-items: center;
+				justify-content: center;
+				border-radius: 50%;
+				overflow: hidden;
+				position: relative;
+				flex: 0 0 auto;
+				cursor: default;
+				-webkit-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+			}
+			#skeleton .circle.big {
+				width: 40px;
+				height: 40px;
+			}
+			#skeleton .search {
+				position: relative;
+				padding: 0px;
+				width: 360px;
+				height: 40px;
+				background-color: #edeef0;
+				box-sizing: border-box;
+				color: rgb(38, 41, 44);
+				opacity: 1;
+				padding: 5px 8px 6px 36px;
+				border-width: 2px;
+				border-style: solid;
+				border-color: #edeef0;
+				border-image: initial;
+				border-radius: 40px;
+				display: flex;
+				align-items: center;
+			}
+			@media (max-width: 1280px) {
+				#skeleton .search {
+					width: 240px;
+				}
+			}
+			#skeleton .separator {
+				height: 2px;
+				margin-top: 24px;
+				margin-bottom: 24px;
+				width: 30px;
+				background: #6150e1;
+				border-radius: 2px;
+				margin-left: 12px;
+			}
+			#skeleton .circle.small {
+				width: 24px;
+				height: 24px;
+			}
+			#skeleton .circle.big.quick {
+				margin-left: 8px;
+			}
+			#skeleton .circle.small.proact {
+				margin-right: 18px;
+			}
+			#skeleton .circle.small.context {
+				margin-right: 20px;
+			}
+			#skeleton .circle.menu {
+				background: #6150e1;
+				margin-left: 16px;
+				margin-top: 32px;
+			}
+			#skeleton .circle.menu.first {
+				margin-top: 16px;
+			}
+			#skeleton .circle.menu.after-separator {
+				margin-top: 0;
+			}
+			#skeleton .main {
+				display: flex;
+				overflow: hidden;
+				position: relative;
+				flex: 1 1 0%;
+				background-color: #f6f7f8;
+			}
+			#skeleton .left .logo {
+				display: flex;
+				flex-direction: column;
+				width: 30px;
+				height: 30px;
+				box-sizing: content-box;
+				padding: 13px;
+			}
+			#skeleton .top {
+				display: flex;
+				flex-direction: row;
+				-webkit-box-pack: justify;
+				justify-content: space-between;
+				width: 100%;
+				z-index: 20;
+				background-color: rgb(255, 255, 255);
+				box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.05), 0px 1px 2px -2px rgba(0, 0, 0, 0.06),
+					0px 1px 3px rgba(0, 0, 0, 0.07); /* elevation raised */
+				overflow: hidden;
+			}
+			#skeleton .circle.user {
+				margin-right: 12px;
+			}
+			#skeleton .top-left {
+				display: flex;
+				margin-right: 16px;
+				flex: 1 1 0%;
+				overflow: hidden;
+			}
+			#skeleton .top-center {
+				display: flex;
+				-webkit-box-align: center;
+				align-items: center;
+				user-select: none;
+				width: 408px;
+				-webkit-box-pack: center;
+				justify-content: center;
+				flex: 0 0 auto;
+			}
+			#skeleton .top-right {
+				display: flex;
+				-webkit-box-align: center;
+				align-items: center;
+				user-select: none;
+				-webkit-box-pack: end;
+				justify-content: flex-end;
+				margin-left: 16px;
+				flex: 1 1 0%;
+				overflow: hidden;
+			}
+			#skeleton .loading-wrapper {
+				display: inline-flex;
+				box-sizing: border-box;
+				position: relative;
+				align-self: center;
+				margin: 0 auto;
+			}
+			#skeleton .loading-anim {
+				width: 64px;
+				height: 64px;
+				box-sizing: border-box;
+				-webkit-animation: a 2s ease infinite;
+				animation: a 2s ease infinite;
+				display: flex;
+				border-radius: 100%;
+				border: 2px solid #dadde1;
+				border-top: 2px solid #08a742;
+				border-right: 2px solid #08a742;
+			}
+			@keyframes a {
+				0% {
+					transform: rotate(-45deg);
+				}
+				40% {
+					transform: rotate(315deg);
+				}
+
+				100% {
+					transform: rotate(1035deg);
+				}
+			}
+			.base-error-title {
+				font-size: 23px;
+				font-weight: 500;
+				color: rgb(38, 41, 44);
+				margin: 24px 0 0;
+			}
+			.base-error-content {
+				font-size: 18px;
+				color: rgba(38, 41, 44, 0.64);
+				margin-top: 8px;
+			}
+			.base-error-link {
+				color: rgb(49, 122, 226);
+				text-decoration: none;
+				cursor: pointer;
+			}
+			.base-error-link:hover {
+				text-decoration: underline;
+			}
+			.base-error-link-as-button {
+				-webkit-appearance: button;
+				-moz-appearance: button;
+				appearance: button;
+				color: #26292c;
+				background: #ffffff;
+				font-size: 15px;
+				line-height: 20px;
+				text-decoration: none;
+				margin-top: 24px;
+				padding: 4px 16px;
+				border: 1px solid rgb(203, 204, 205);
+			}
+			#base-error-wrapper {
+				display: none;
+				position: absolute;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				text-align: center;
+				width: 100%;
+				height: 100%;
+				line-height: 24px;
+				margin-bottom: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="skeleton">
+			<div class="left">
+				<div class="logo">
+					<svg viewBox="0 0 24 24"><path fill="#fff" d="M10.15 4.41c-.06-.53-.41-1.18-1.8-1.18H5v2.91h1.37c.21 0 .29.12.29.32v14.56h3.72v-5.94a5.1 5.1 0 0 0 3.38 1.22c3.49 0 5.76-2.77 5.76-6.73 0-4.02-2.2-6.72-5.64-6.72-2 0-3.16.94-3.73 1.56zm3.05 1.6c1.69 0 2.82 1.45 2.82 3.61 0 2.47-1.44 3.57-2.87 3.57-1.91 0-2.79-1.84-2.79-3.54 0-2.69 1.47-3.64 2.84-3.64z"></path></svg>
+				</div>
+				<div class="circle small menu first"></div>
+				<div class="circle small menu"></div>
+				<div class="circle small menu"></div>
+				<div class="circle small menu"></div>
+				<div class="separator"></div>
+				<div class="circle small menu after-separator"></div>
+				<div class="circle small menu"></div>
+				<div class="circle small menu"></div>
+				<div class="circle small menu"></div>
+				<div class="circle small menu"></div>
+			</div>
+			<div class="right">
+				<div class="top">
+					<div class="top-left"></div>
+					<div class="top-center">
+						<div class="search"></div>
+						<div class="circle big quick"></div>
+					</div>
+					<div class="top-right">
+						<div class="circle small proact"></div>
+						<div class="circle small context"></div>
+						<div class="circle user"></div>
+					</div>
+				</div>
+				<div id="content-main" class="main">
+					<div id="loading-wrapper" class="loading-wrapper">
+						<div class="loading-anim"></div>
+						<svg
+							id="icon-logo-p"
+							style="position: absolute;left: calc(50% - 8px);top: calc(50% - 8px);height: 16px;width: 16px;fill: #cbcccd;"
+							viewBox="0 0 24 24">
+							<path
+								d="M10.15 4.41c-.06-.53-.41-1.18-1.8-1.18H5v2.91h1.37c.21 0 .29.12.29.32v14.56h3.72v-5.94a5.1 5.1 0 0 0 3.38 1.22c3.49 0 5.76-2.77 5.76-6.73 0-4.02-2.2-6.72-5.64-6.72-2 0-3.16.94-3.73 1.56zm3.05 1.6c1.69 0 2.82 1.45 2.82 3.61 0 2.47-1.44 3.57-2.87 3.57-1.91 0-2.79-1.84-2.79-3.54 0-2.69 1.47-3.64 2.84-3.64z"
+							></path>
+						</svg>
+					</div>
+					<div id="base-error-wrapper" class="base-error-wrapper">
+						<object data="https://cdn.sjc-1.pipedriveassets.com/froot/icons/error.svg" width="240" height="160"></object>
+						<h2 class="base-error-title">Something went wrong</h2>
+						<div class="base-error-content">
+							Please try again. If this keeps happening, <a href="/cdn-cgi/l/email-protection#3e4d4b4e4e514c4a7e4e574e5b5a4c57485b105d5153" class="base-error-link">reach out to support</a>.
+						</div>
+						<a href="." class="base-error-link-as-button">Retry</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="root"></div>
+	
+	</body>
+
+</html>

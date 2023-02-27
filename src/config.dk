@@ -1,0 +1,14 @@
+#include "dkli.dkh"
+#!
+module "config"
+{
+	
+	@use_bdconfig=@false
+	@accept_qnames=@false
+	
+
+	new @config
+	{
+		@"connection":"pipelines_test@MaxiComercio.R5"
+	}
+}
