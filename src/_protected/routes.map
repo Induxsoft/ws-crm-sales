@@ -5,3 +5,4 @@ GET: /_css/style.css > /_app/_css/style.css
 GET: /_js/model.js > /_app/_js/model.js
 GET: /_js/views.js > /_app/_js/views.js
 GET: /_js/controller.js > /_app/_js/controller.js
+GET: /_js/designer.js > /_app/_js/designer.js

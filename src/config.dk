@@ -9,6 +9,6 @@ module "config"
 
 	new @config
 	{
-		@"connection":"pipelines_test@MaxiComercio.R5"
+		@"connection":"pipelines@MyApp"
 	}
 }

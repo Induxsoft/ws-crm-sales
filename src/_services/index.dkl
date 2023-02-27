@@ -28,7 +28,7 @@ module "index.dkl"
 		}
 
 		ref db=open.db("")
-		do rise_error(00,"wew")
+
 		switch method
 		{
 			case "GET"

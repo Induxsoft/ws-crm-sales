@@ -34,12 +34,25 @@ var views={
     select:function(id,data)
     {
         var select="";
-        for (var i = 0; i<data.lenght; i++) {
+        for (var i = 0; i<data.length; i++) {
             var d=data[i];
-            select+=`<option value="${d.sys_pk}">${d.codigo+"  "+d.descripcion}</option>`;
+            select+=`<option value="${d.sys_pk}">${d.codigo ?? ""+"  "+d.name}</option>`;
         }
+
         var sel=document.querySelector(id);
         if(sel)
             sel.innerHTML=select;
+    },
+    print_stages:function(data)
+    {
+        var stages="";
+        for (var i = 0; i<data.length; i++) {
+            var d=data[i];
+            stages+=`<option value="${d.sys_pk}">${d.codigo ?? ""+"  "+d.name}</option>`;
+        }
+
+        var sel=document.querySelector("#conten-padre");
+        if(sel)
+            sel.innerHTML=stages;
     }
 }

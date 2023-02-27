@@ -22,19 +22,27 @@ module "lib.dk"
     #!
     crm.post_action::&db,&params,&postData
     {
+        if @@(params,"pipeline_id")==""{ref newpipeline=crm.create_pipeline(db,params,postData)}
+        else{ref newpipeline=crm.create_stage(db,params,postData)}
 
+        return newpipeline
     }
 
     #!
     crm.patch_action::&db,&params,&postData
     {
-
+        ref newdata=crm.update_pipeline(db,params,postData)
+        return newdata
     }
 
     #!
     crm.del_action::&db,&params,&postData
     {
-
+        
+        if @@(params,"stage_id")!=""{do crm.delete_stage(db,params)}
+        else{do crm.delete_pipeline(db,params)}
+        
+        return crm.get_pipelines(db,params)
     }
 
 
@@ -54,24 +62,23 @@ module "lib.dk"
     #!
     crm.get_pipelines::&db,&params
     {
-
-        if @@(params,"pipeline_id")!=""{ref pipelines=dbr.list(db,@get_pipeline,params)}
-        else{ref pipelines=dbr.list(db,@list_pipelines,params)}
+        if @@(params,"pipeline_id")!=""{ref pipelines=dbr.list(db,ftext(@get_pipeline),params)}
+        else{ref pipelines=dbr.list(db,ftext(@list_pipelines),params)}
 
         for i=0;i<@count(pipelines)
         {
             ref pipeline=@item(pipelines,i)
             pipeline<"stages*">:crm.get_pipeline_stages(db,params)
         }
-        
+        return pipelines
     }
 
     #!
     crm.get_pipeline_stages::&db,&params
     {
-        if @@(params,"stage_id")!=""{ref stages=dbr.list(db,@get_stage,params)}
-        if @@(params,"pipeline_id")!=""{ref stages=dbr.list(db,@get_stage,params)}
-        else{ref stages=dbr.list(db,@list_stages,params)}
+        if @@(params,"stage_id")!=""{ref stages=dbr.list(db,ftext(@get_stage),params)}
+        if @@(params,"pipeline_id")!=""{ref stages=dbr.list(db,ftext(@get_stage),params)}
+        else{ref stages=dbr.list(db,ftext(@list_stages),params)}
         
         return stages
     }
@@ -79,7 +86,10 @@ module "lib.dk"
     #!
     crm.create_pipeline::&db,&params,&postData
     {
-        do dbr.execute(db,@insert_pipeline,postData)
+        postData<"uuid">:cut(uuid(),31)
+        do dbr.execute(db,ftext(@insert_pipeline),postData)
+        @keyfield="sys_guid"
+        params<"pipeline_id">:@@(postData,"uuid")
         return crm.get_pipeline_stages(db,params)
     }
 
@@ -87,32 +97,40 @@ module "lib.dk"
     crm.create_stage::&db,&params,&postData
     {
         postData<"ref_pipeline">:@@(params,"pipeline_id")
-        do dbr.execute(db,@insert_pipeline_stages,postData)
+        postData<"uuid">:cut(uuid(),31)
+        do dbr.execute(db,ftext(@insert_pipeline_stages),postData)
         return crm.get_pipeline_stages(db,params)
     }
 
     #!
     crm.update_pipeline::&db,&params,&postData
     {
+        if @@(params,"stage_id")!=""{do crm.update_stage(db,params,postData)}
+        else{do dbr.execute(db,ftext(@update_pipeline),postData)}
         
+        return crm.get_pipelines(db,params)
     }
 
     #!
     crm.update_stage::&db,&params,&postData
     {
+        @keyfield="ref_pipeline"
+        postData<"pipeline_id">:@@(params,"pipeline_id")
+        postData<"stage_id">:@@(params,"stage_id")
+        do dbr.execute(db,ftext(@update_stage),postData)
 
     }
 
     #!
     crm.delete_pipeline::&db,&params
     {
-
+        do dbr.execute(db,ftext(@delete_pipeline),params)
     }
 
     #!
     crm.delete_stage::&db,&params
     {
-        
+        do dbr.execute(db,ftext(@delete_stage),params)
     }
 
     point @post   to crm.post_action

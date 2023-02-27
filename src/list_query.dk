@@ -5,7 +5,7 @@ module "lista de consultas"
 
 	//consultas
 	@keyfield="sys_pk"
-	@fields_system="REPLACE(UUID(),'-',''),now(),now(),0,0,0,'',''"
+	@fields_system="@uuid,now(),now(),0,0,0,'',''"
 	@list_pipelines="select * from sales_pipeline"
 	@get_pipeline="select * from sales_pipeline where #<@keyfield>=@pipeline_id"
 	@list_stages="select * from sales_pipeline_stage "
@@ -18,5 +18,9 @@ module "lista de consultas"
 	//variables para usar la sentencia update
 	
 	@update_pipeline="update sales_pipeline set name=@name,probability=@probability where #<keyfield>=@pipeline_id"
-	@update_stage="update "
+	@update_stage="update sales_pipeline_stage set name=@name,probability=@probability,stuck_in_days=@stuck_in_days where #<keyfield>=@pipeline_id and sys_pk=@stage_id"
+
+
+	@delete_stage="delete from sales_pipeline_stage where ref_pipeline=@pipeline_id and sys_pk=@stage_id"
+	@delete_pipeline="delete from sales_pipeline where #<@keyfield>=@pipeline_id"
 }

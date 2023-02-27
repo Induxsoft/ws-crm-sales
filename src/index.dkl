@@ -12,20 +12,27 @@ module "index.dkl"
 
      view=@@(@http_context,"request/get/view")
 
-     switch view
-     {
-          case "login"{}
-          default{include path.concat(@path_views,"view_pipeline.dkl")}
-     }
-   
      #$
-     script
+     div
      {
-          $'
-          var end_point_service="#<@url>";
-          controller.get_pipelines("",null);
-          '
+          #!
+          switch view
+          {
+               case "login"{}
+               default{include path.concat(@path_views,"view_pipeline.dkl")}
+          }
+
+          #$
+           script
+          {
+               $'
+               var end_point_service="#<@url>";
+               controller.get_pipelines("",null);
+               '
+          }
      }
+     
+   
      #!
      exception
      {
