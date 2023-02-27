@@ -17,5 +17,6 @@ module "lista de consultas"
 
 	//variables para usar la sentencia update
 	
-	
+	@update_pipeline="update sales_pipeline set name=@name,probability=@probability where #<keyfield>=@pipeline_id"
+	@update_stage="update "
 }
