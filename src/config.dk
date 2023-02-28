@@ -9,6 +9,6 @@ module "config"
 
 	new @config
 	{
-		@"connection":"pipelines@MyApp"
+		@"connection":"connections@induxsoft/ws3a1f90ec1242465c9a54e11c045c79aa@workspaces"
 	}
 }

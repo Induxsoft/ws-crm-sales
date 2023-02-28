@@ -34,7 +34,6 @@ module "index.dkl"
 			case "GET"
 			{
 				that @get(db,params)->*data
-				// ref data=crm.get_pipelines(db,params)
 			}
 			case "POST"
 			{
@@ -43,14 +42,12 @@ module "index.dkl"
 			case "PATCH"
 			{
 				that @path(db,params,postData)->*data
-				// ref data=crm.patch_action(db,params,postData)
 			}
 			case "DELETE"
 			{
 				that @delete(db,params,postData)->*data
-				// ref data=crm.del_action(db,params,postData)
 			}
-			default{ref data=@null}
+			default{that @custom(db,params,postData)->*data}
 		}
 		if dbr.is_open(db){do dbr.close(db)}
 

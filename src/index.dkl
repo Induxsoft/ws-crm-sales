@@ -21,7 +21,8 @@ module "index.dkl"
                case "login"{}
                default{include path.concat(@path_views,"view_pipeline.dkl")}
           }
-
+          #!
+          #include "_app/_views/modal.dkl"
           #$
            script
           {
@@ -39,4 +40,6 @@ module "index.dkl"
           @message_error=last_error()
           include path.concat(@path_views,"error.dkl")
      }
+     
+
 }

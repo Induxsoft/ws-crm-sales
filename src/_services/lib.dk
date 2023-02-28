@@ -42,6 +42,7 @@ module "lib.dk"
         if @@(params,"stage_id")!=""{do crm.delete_stage(db,params)}
         else{do crm.delete_pipeline(db,params)}
         
+        do field.remove(params,"pipeline_id")
         return crm.get_pipelines(db,params)
     }
 
@@ -62,7 +63,7 @@ module "lib.dk"
     #!
     crm.get_pipelines::&db,&params
     {
-        if @@(params,"pipeline_id")!=""{ref pipelines=dbr.list(db,ftext(@get_pipeline),params)}
+        if @@(params,"pipeline_id")!=""{ref pipelines=dbr.rec(db,ftext(@get_pipeline),params)}
         else{ref pipelines=dbr.list(db,ftext(@list_pipelines),params)}
 
         for i=0;i<@count(pipelines)
@@ -76,8 +77,13 @@ module "lib.dk"
     #!
     crm.get_pipeline_stages::&db,&params
     {
+        
         if @@(params,"stage_id")!=""{ref stages=dbr.list(db,ftext(@get_stage),params)}
-        if @@(params,"pipeline_id")!=""{ref stages=dbr.list(db,ftext(@get_stage),params)}
+        else if @@(params,"pipeline_id")!=""{
+            @keyfield="ref_pipeline"
+            params<"stage_id">:@@(params,"pipeline_id")
+            ref stages=dbr.list(db,ftext(@get_stage),params)
+        }
         else{ref stages=dbr.list(db,ftext(@list_stages),params)}
         
         return stages
@@ -105,6 +111,7 @@ module "lib.dk"
     #!
     crm.update_pipeline::&db,&params,&postData
     {
+        postData<"pipeline_id">:@@(params,"pipeline_id")
         if @@(params,"stage_id")!=""{do crm.update_stage(db,params,postData)}
         else{do dbr.execute(db,ftext(@update_pipeline),postData)}
         
@@ -124,6 +131,9 @@ module "lib.dk"
     #!
     crm.delete_pipeline::&db,&params
     {
+        @keyfield="ref_pipeline"
+        do dbr.execute(db,ftext(@delete_stages_pipeline),params)
+        @keyfield="sys_pk"
         do dbr.execute(db,ftext(@delete_pipeline),params)
     }
 
@@ -133,10 +143,15 @@ module "lib.dk"
         do dbr.execute(db,ftext(@delete_stage),params)
     }
 
+    #!
+    crm.custom::&db,&params,&postData
+    {
+        return @null
+    }
     point @post   to crm.post_action
     point @path   to crm.update_pipeline
-    point @delete   to crm.delete_pipeline
+    point @delete   to crm.del_action
     point @get     to crm.get_pipelines
-    
+    point @custom to crm.custom
    
 }

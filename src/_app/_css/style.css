@@ -77,9 +77,15 @@ h3{
   margin: 30px;
 }
 
-
+.p-30{padding: 30px !important;}
+.pt-30{padding-top: 30px !important;}
+.pl-30{padding-left: 30px !important;}
+.pr-30{padding-right: 30px !important;}
+.pb-30{padding-bottom: 30px !important;}
 /* ------------------------------------------------body------------------------------------------------- */
-
+.d-content{display: contents !important;}
+.d-flex{display: flex !important;}
+.f-grow-1{flex-grow: 1 !important;}
 .input{
     position: relative;
     left: 30px;
@@ -599,6 +605,54 @@ input:checked + .slider2 .off
 }
 
 
+/*_---------------------------------------------------------------modal-------------------------------------------------------  */
+.modal{
+  visibility: hidden;
+  position: relative;
+}
+.label_modal{
+  position: relative;
+  left: 40px;
+}
+.modal_style{
+  background-color: #ced4da;
+  width: 20%;
+  height: 25%;
+  position:absolute;
+  bottom: 50%;
+  left: 40%;
+
+}
+.modal_style:target {
+	opacity:1;
+	pointer-events: auto;
+}
+.container_modal{
+ margin-top: 30px;
+}
+.input{
+  width: 200px;
+  margin-left: 8px;
+}
+/* .modal_fonfo{
+  background: black;
+} */
+.btn_guardar{
+  position: relative;
+  top:26px;
+  left: 75%;
+  padding: 0.4rem;
+  background: #0d6efd;
+  border: none;
+  cursor: pointer;
+  color: white;
+
+}
+.icon_modal{
+  position: relative;
+  margin-left: 90%;
+  cursor: pointer;
+}
 
 
 

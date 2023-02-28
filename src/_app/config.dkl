@@ -2,7 +2,7 @@
 #!
 module "config"
 {
-	@path_root="web/192.168.1.91/_app"
+	@path_root="web/crm-sales.ws.induxsoft.net/_app"
 	@path_absolute=""
 	@end_point_service=""
 	@path_views=path.concat(@path_root,"_views")

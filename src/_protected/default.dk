@@ -21,7 +21,7 @@ program
     load_script::
     {
     	scrips=""
-    	files="style.css,model.js,views.js,controller.js,designer.js"
+    	files="designer.js,style.css,model.js,views.js,controller.js"
     	ref files_scrips=split(files,",")
     	for i=0;i<list.count(files_scrips)
     	{
