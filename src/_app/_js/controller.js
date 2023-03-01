@@ -31,6 +31,7 @@ var controller={
         model.invoke_service(uri,null,function(data) {
           views.print_stages(data[0]);
           views.edit_view(data[0]);
+          views.view_new(true);
         },
         function(error) {
           alert(error.message);
@@ -57,7 +58,7 @@ var controller={
 	var uri=`${url}crm/sales/pipeline/${pipeline_id.value}`;
 	        model.invoke_service(uri,data,function(data) {
 	          controller.close_modal();
-	          views.print_stages(data);
+	          views.appendOption("#pipelines",data);
 	          views.edit_view(data);
 	        },
 	        function(error) {
@@ -231,9 +232,10 @@ var controller={
 		var data=data_pipeline;
         
         model.invoke_service(uri,data,function(data) {
-          views.print_stages(data[0]);
-          views.edit_view(data);
+          // views.print_stages(data[0]);
+          views.edit_view(data[0]);
           views.edit_stage(id,null,true);
+          views.view_new(true);
         },
         function(error) {
           alert(error.message);
@@ -249,15 +251,15 @@ var controller={
 
     	var uri=`${url}crm/sales/pipeline/${idpipeline.value}/stages/${sys_pk}`;
     	model.invoke_service(uri,null,function(data) {
-         	controller.delete_stage(id,0);
+         	controller.delete_stage(id,0,false);
         },
         function(error) {
           alert(error.message);
         },"DELETE",false);
     },
-    delete_stage(id,sys_pk)
+    delete_stage(id,sys_pk,conf=true)
     {
-    	if (!confirm("¿Estas seguro de eliminar?"))
+    	if (conf && !confirm("¿Estas seguro de eliminar?"))
     		return;
 
     	if(Number(sys_pk)<=0)

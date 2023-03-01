@@ -606,11 +606,11 @@ input:checked + .slider2 .off
 
 /* pop-up actual */
 .popup .popuptext {
+  padding: 10px !important;
   visibility: hidden;
   width: 300px;
-  background-color: black;
-  color: white;
-  /* text-align: center; */
+  background: var(--light-gray-color);
+  color: black;
   border-radius: 6px;
   padding: 8px 0;
   position: absolute;

@@ -97,7 +97,7 @@ module "lib.dk"
         do dbr.execute(db,ftext(@insert_pipeline),postData)
         @keyfield="sys_guid"
         params<"pipeline_id">:@@(postData,"uuid")
-        return crm.get_pipeline_stages(db,params)
+        return crm.get_pipelines(db,params)
     }
 
     #!
