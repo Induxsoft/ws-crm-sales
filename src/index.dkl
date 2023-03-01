@@ -28,7 +28,7 @@ module "index.dkl"
           {
                $'
                var end_point_service="#<@url>";
-               controller.get_pipelines("",null);
+               
                '
           }
      }

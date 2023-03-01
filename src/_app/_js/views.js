@@ -1,12 +1,12 @@
-function mostrarMensaje() {
+function mostrarMensaje(data) {
     var popup = document.getElementById("myPopup");
     popup.classList.toggle("show");
 }
 
-function mostrarMensajeprueba() {
-    var popup = document.getElementById("prueba");
-    popup.classList.toggle("show");
-}
+// function mostrarMensajeprueba() {
+//     var popup = document.getElementById("prueba");
+//     popup.classList.toggle("show");
+// }
 
 
 
@@ -33,7 +33,6 @@ true
 
 window.addEventListener("load", (event) => {
   views.init();
-  
 });
 
 
@@ -61,40 +60,35 @@ var views={
     print_stages:function(data)
     {
         var stages="";
-        for (var i = 0; i<data.length; i++) {
-            var d=data[i];
-
-            for(var j=0;j<d.stages.length;j++)
+        // for (var i = 0; i<data.length; i++) {
+        //     var d=data[i];
+            for(var j=0;j<data.stages.length;j++)
             {
-                var stg=d.stages[j];
+                var stg=data.stages[j];
                 stages+=stage(stg);
             }
             
-        }
+        // }
 
         var sel=document.querySelector("#conten-padre");
         if(sel)
-            if(stages!=""){
-                sel.innerHTML=stages;
-                views.module_newstage();
-            }
+            sel.innerHTML=stages;
+            views.module_newstage();
     },
 
     show_modal:function(idmodal)
 	{
 		var element=document.querySelector("#"+idmodal);
-       console.log(element)
 
-       // alert('mostrar')
 		if(element)
-			element.classList.remove("modal");
+			element.classList.remove("hidde_control");
 	},
     close_modal:function(idmodal){
         var close=document.querySelector("#"+idmodal)
 
         if(close)
         {
-            close.classList.add("modal")
+            close.classList.add("hidde_control");
         }
 
     },
@@ -105,7 +99,6 @@ var views={
        
     },
      edit_view:function(data){
-        console.log(data)
         var name = document.getElementById("txt_name");
         var sys_pk=document.getElementById("inpu_syspk")
         name.value=data.name;
@@ -119,7 +112,81 @@ var views={
         sys_pk.value="";
 
     },
+    disable_enable_stages:function(enable=false)
+    {
+        if(list_stages)
+        {
+            for (var i =0; i < list_stages.childNodes.length; i++) {
+                var stage=list_stages.childNodes[i];
+                if(stage.id!="" && stage.id!="new")
+                {
+                    var elements=document.querySelectorAll(`#${stage.id} input`);
+                    var togle=document.querySelector(`#${stage.id} .switch2`);
 
+                    if(enable)
+                        togle.classList.remove("p-event-n");
+                    else
+                        togle.classList.add("p-event-n");
+
+                    for (var j = 0; j<elements.length; j++) {
+                        var inp=elements[j];
+                        if(enable)
+                            inp.classList.remove("p-event-n");
+                        else
+                            inp.classList.add("p-event-n");
+                    }
+                    
+                }
+            }
+        }
+    },
+    edit_stage:function(id,btn=null,cancel=false)
+    {
+        var elements=document.querySelectorAll(`#${id} input`);
+        var togle=document.querySelector(`#${id} .switch2`);
+        if(togle)
+            togle.classList.remove("p-event-n");
+
+        var btn_save=document.querySelector(`#${id} #stage-save`);
+        var btn_cancel=document.querySelector(`#${id} #stage-cancel`);
+        var btn_edit=document.querySelector(`#${id} #stage-edit`);
+
+        if(elements)
+        {
+             for (var j = 0; j<elements.length; j++) 
+             {
+                var inp=elements[j];
+                if(!cancel)
+                    inp.classList.remove("p-event-n");
+                else
+                    inp.classList.add("p-event-n");
+            }
+            if(btn!=null)btn.classList.add("hidde_control");
+            if(btn_save && !cancel)btn_save.classList.remove("hidde_control");
+            if(btn_cancel && !cancel)btn_cancel.classList.remove("hidde_control");
+            if(cancel)
+            {
+                if(btn_save)btn_save.classList.add("hidde_control");
+                if(btn_cancel)btn_cancel.classList.add("hidde_control");
+                if(btn_edit)btn_edit.classList.remove("hidde_control");
+            }
+        }
+    },
+    delete_stage:function(id)
+    {
+        remove(id);
+        views.view_new();
+    },
+    view_new:function(visible=true)
+    {
+        var newelm=document.querySelector("#new");
+        if(newelm)
+        {
+            if(visible)newelm.classList.remove("hidde_control");
+            else
+                newelm.classList.add("hidde_control");
+        }
+    }
    
 
 }

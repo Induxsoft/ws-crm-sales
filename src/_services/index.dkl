@@ -41,7 +41,7 @@ module "index.dkl"
 			}
 			case "PATCH"
 			{
-				that @path(db,params,postData)->*data
+				that @patch(db,params,postData)->*data
 			}
 			case "DELETE"
 			{
