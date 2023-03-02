@@ -69,6 +69,7 @@ module "lib.dk"
         for i=0;i<@count(pipelines)
         {
             ref pipeline=@item(pipelines,i)
+            params<"pipeline_id">:@@(pipeline,"sys_pk")
             pipeline<"stages*">:crm.get_pipeline_stages(db,params)
         }
         
@@ -80,9 +81,9 @@ module "lib.dk"
     {
         
         if @@(params,"stage_id")!=""{ref stages=dbr.list(db,ftext(@get_stage),params)}
-        else if @@(params,"pipeline_id")!=""{
+        else if @@(params,"$pipeline_id")!=""{
             @keyfield="ref_pipeline"
-            params<"stage_id">:@@(params,"pipeline_id")
+            params<"stage_id">:@@(params,"$pipeline_id")
             ref stages=dbr.list(db,ftext(@get_stage),params)
         }
         else{ref stages=dbr.list(db,ftext(@list_stages),params)}

@@ -6,7 +6,7 @@ module "lista de consultas"
 	//consultas
 	@keyfield="sys_pk"
 	@fields_system="@uuid,now(),now(),0,0,0,'',''"
-	@list_pipelines="select * from sales_pipeline"
+	@list_pipelines="select * from sales_pipeline order by name desc"
 	@get_pipeline="select * from sales_pipeline where #<@keyfield>=@pipeline_id"
 	@list_stages="select * from sales_pipeline_stage "
 	@get_stage="select * from sales_pipeline_stage where #<@keyfield>=@stage_id"

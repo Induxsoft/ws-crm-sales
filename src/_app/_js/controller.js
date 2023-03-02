@@ -1,9 +1,22 @@
+var is_modify=false;
 window.addEventListener("load", (event) => {
   controller.init();
   if(idpipeline)
-    idpipeline.addEventListener("change",function(){
+  {
+  	let lastSelectedIndex =idpipeline.selectedIndex;
+  	idpipeline.addEventListener("click", function () {
+        lastSelectedIndex = idpipeline.selectedIndex;
+    });
+  	idpipeline.addEventListener("change",function(e){
+    	if(controller.verify_modify()){
+    		idpipeline.selectedIndex=lastSelectedIndex;
+    		e.stopPropagation();
+    		return;
+    	}
       controller.get_pipeline();
     });
+  }
+    
 });
 
 var controller={
@@ -32,6 +45,7 @@ var controller={
           views.print_stages(data[0]);
           views.edit_view(data[0]);
           views.view_new(true);
+          views.disable_enable_stages();
         },
         function(error) {
           alert(error.message);
@@ -183,9 +197,20 @@ var controller={
         },"POST",false);
     	
     },
-    edit_stage:function(id,btn=null,cancel=false)
+    edit_stage:function(id,btn=null,event,cancel=false)
     {
-    	views.edit_stage(id,btn,cancel);
+    	if(event)
+    		event.stopPropagation();
+
+    	if(!cancel && controller.verify_modify()){
+    		return;
+    	}
+
+    	 views.edit_stage(id,btn,cancel);
+    	views.view_new(cancel);
+
+    	if(!cancel)
+    		controller.in_modify(true);
     },
     save_stage:function(id,sys_pk)
     {
@@ -236,6 +261,7 @@ var controller={
           views.edit_view(data[0]);
           views.edit_stage(id,null,true);
           views.view_new(true);
+          controller.in_modify(false);
         },
         function(error) {
           alert(error.message);
@@ -262,11 +288,29 @@ var controller={
     	if (conf && !confirm("¿Estas seguro de eliminar?"))
     		return;
 
-    	if(Number(sys_pk)<=0)
+    	if(Number(sys_pk)<=0){
     		views.delete_stage(id);
+    		controller.in_modify(false);
+    	}
     	else
     	{
     		controller.delete_stage_bd(id,sys_pk);
     	}
+    },
+    parent_select:function(uuid,e)
+    {
+    	if(e){
+    		e.stopPropagation();
+    	}
+    	if(controller.verify_modify()){
+    		return;
+    	}
+    	views.parent_select(uuid);
+    },
+    in_modify:function(value=false){is_modify=value;},
+    verify_modify:function(){
+    	if(is_modify)
+    		alert("Inicio un proceso pero no fue finalizada, debe terminar el proceso.");
+    	return is_modify;
     }
 }

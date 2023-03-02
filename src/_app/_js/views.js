@@ -89,10 +89,12 @@ var views={
     },
      edit_view:function(data){
         var name = document.getElementById("txt_name");
-        var sys_pk=document.getElementById("inpu_syspk")
+        var sys_pk=document.getElementById("inpu_syspk");
+        var probability=document.getElementById("pipeline_probability");
+
         name.value=data.name;
         sys_pk.value=data.sys_pk;
-
+        probability.checked=data.probability ?? false;
     },
     clear_modal:function(){
         var name = document.getElementById("txt_name");
@@ -109,6 +111,7 @@ var views={
                 var stage=list_stages.childNodes[i];
                 if(stage.id!="" && stage.id!="new")
                 {
+
                     var elements=document.querySelectorAll(`#${stage.id} input`);
                     var togle=document.querySelector(`#${stage.id} .switch2`);
 
@@ -119,10 +122,14 @@ var views={
 
                     for (var j = 0; j<elements.length; j++) {
                         var inp=elements[j];
-                        if(enable)
+                        if(enable){
                             inp.classList.remove("p-event-n");
+                             if(j==0)
+                                inp.focus();
+                        }
                         else
                             inp.classList.add("p-event-n");
+                       
                     }
                     
                 }
@@ -224,6 +231,55 @@ var views={
         var lbl=document.querySelector(`#lbl${uuid}`);
         if(lbl)
             lbl.innerHTML=e.value;
+    },
+    addNewStagePosition:function(e,parent)
+    {
+        if(!e)
+            return;
+
+        var position=e.getAttribute("position");
+        var parent=document.getElementById(parent);
+
+        var postn="beforebegin";
+        switch(position)
+        {
+            case "after":postn="afterend";break;
+        }
+
+        if(parent){
+            parent.insertAdjacentHTML(postn,stage(null,false));
+            views.view_new(false);
+        }
+
+    },
+    parent_select:function(uuid)
+    {
+        if(uuid=="")
+            return;
+
+        var parent=document.querySelector(uuid);
+        views.delete_itemhover();
+        if(parent){
+            parent.firstElementChild.classList.add("item_hover");
+            parent.lastElementChild.firstElementChild.classList.add("item_hover");
+        }
+
+
+    },
+    delete_itemhover:function()
+    {
+         if(list_stages)
+        {
+            for (var i =0; i < list_stages.childNodes.length; i++) {
+                var stage=list_stages.childNodes[i];
+                if(stage.id!="" && stage.id!="new")
+                {
+                    stage.firstElementChild.firstElementChild.classList.remove("item_hover");
+                    stage.firstElementChild.lastElementChild.firstElementChild.classList.remove("item_hover");
+                
+                }
+            }
+        }
     }
    
 
