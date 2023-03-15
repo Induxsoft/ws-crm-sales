@@ -5,10 +5,14 @@ module "config"
 	
 	@use_bdconfig=@false
 	@accept_qnames=@false
+
+	//si @use_bdconfig es false
+	@qname_app="workspaces"
+	@qname_prefix="connections@induxsoft/"
 	
 
 	new @config
 	{
-		@"connection":"connections@induxsoft/ws3a1f90ec1242465c9a54e11c045c79aa@workspaces"//pipelines@myapp
+		@"connection":""//pipelines@myapp
 	}
 }

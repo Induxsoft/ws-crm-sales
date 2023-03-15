@@ -7,11 +7,18 @@ module "index.dkl"
      #include "dbr.dkh"
      #include "serialize.dkh"
 
-     @SITE_INCLUDES="_app/config.dkl"
+     @SITE_INCLUDES="_app/config.dkl,_app/lib.dk"
      #include "website.dkl"
 
      view=@@(@http_context,"request/get/view")
+     @connections=@@(@http_context,"request/get/ws")
+     @ids=@@(@http_context,"request/get/ids")
 
+     do address_workspace()
+
+     // do rise_error(00,to.json(@http_context))
+
+     
      #$
      div
      {
@@ -27,7 +34,25 @@ module "index.dkl"
            script
           {
                $'
-               var end_point_service="#<@url>";
+               var end_point_service="#<@end_point_service>";
+               var autorizations="#<@connections>:#<@ids>";
+               #<ftext(file.rtext(@model_js))>
+                    
+                #<ftext(file.rtext(@driver_js))>
+                #<ftext(file.rtext(@view_js))>
+                #<ftext(file.rtext(@designer_js))>
+               $(document).ready(function(){
+                    
+                    
+                    switch ("#<view>")
+                    {
+                         case "login":break;
+                         default:
+                              controller.get_pipelines("",null);
+                              break;
+                    }
+               });
+
                
                '
           }

@@ -5,14 +5,14 @@
 module "body"
 {
     #$
-    div(class="body-container p-30" style="padding:8px")
+    div(class="body-container p-30" id="body-first" style="padding:8px")
     {
                 div(class="conten")
                 {
                     div(class="line-row")
                     {
                         select(id="pipelines" class="form-select" style="width: 50%;"){option{""}}
-                        button(class="btn btn-edit" id="btn-edit" onclick="controller.view_modal();"){"..."}
+                        button(class="btn btn-edit" id="btn-edit" onclick="controller.view_modal('user_modal',true);"){"..."}
                         button(class="btn btn-create" id="btn-more" onclick="controller.view_modal(); controller.clear()"){"+"}
                         button(class="btn btn-delete" id="btn-edit" onclick="controller.delete();"){"-"}
                          
@@ -30,35 +30,7 @@ module "body"
             div(class="container-pruebas" id="first_stage" )
             {
                      
-                        div(class="head" draggable="true" id="head"){
-                             icons(class="icon-mas" id="icon-mas" onclick=""){
-                            svg (xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16"){
-                            path (d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z")
-                           }
-                            }
-                            h3(class="navegacion"){"New stage"}
-                            icons(class="icon-head"){
-                                svg (xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-diagram-2-fill" viewBox="0 0 16 16"){
-                                        path ("fill2-rule"="evenodd" d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5v1A1.5 1.5 0 0 1 8.5 6v1H11a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0v-1A.5.5 0 0 1 5 7h2.5V6A1.5 1.5 0 0 1 6 4.5v-1zm-3 8A1.5 1.5 0 0 1 4.5 10h1A1.5 1.5 0 0 1 7 11.5v1A1.5 1.5 0 0 1 5.5 14h-1A1.5 1.5 0 0 1 3 12.5v-1zm6 0a1.5 1.5 0 0 1 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1A1.5 1.5 0 0 1 9 12.5v-1z")
-                                }
-                            }
-
-                            icons(class="icon-head"){
-                            svg (xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16"){
-                                path (d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z")
-                            }
-                            }
-                             icons(class="icon-mas1" id="icon-mas1" onclick=""){
-                            svg (xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16"){
-                          path (d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z")
-                           }
-                            }
-
-                            
-                        }
-
-                     
-
+                        div(class="head" draggable="true" id="head"){$""}
 
                      div(class="container1"){
                             div(class="grid-item grid-item-2  active" id="form" ){
@@ -114,16 +86,7 @@ module "body"
                     h2{"Añadir una etapa"}
                     button(class="btn btn-new"){"Nueva etapa"}     
             }
-            #$
-            script
-            {
-                $'
-                    window.addEventListener("load", (event) => {
-                        controller.get_pipelines("",null);
-                    });
-                    
-                '
-            }
+
         }
         
     }

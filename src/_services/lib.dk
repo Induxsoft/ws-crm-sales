@@ -20,6 +20,29 @@ module "lib.dk"
     }
 
     #!
+    parse.authorization::auth
+    {
+        if contains(tolower(auth),"bearer"){ auth=trim(replace(tolower(auth),"bearer","")) }
+
+        if auth==""{do rise_error(99,"No se pudo procesar el encabezado con la autorización básica. base64(jobsgroup:clave_de_api).")}
+
+        if not(contains(auth,":")){auth=from.base64(trim(auth))}
+
+        ref dauth=split(auth,":")
+        
+        if @count(dauth)>1
+        {
+            new dataAuth
+            {
+                @"ws":list.str(dauth,0)
+                @"ids":list.str(dauth,1)
+            }
+            return dataAuth
+        }
+        do rise_error(99,"No se pudo procesar el encabezado con la autorización básica. base64(jobsgroup:clave_de_api).")
+    }
+
+    #!
     crm.post_action::&db,&params,&postData
     {
         if @@(params,"pipeline_id")==""{ref newpipeline=crm.create_pipeline(db,params,postData)}
@@ -128,10 +151,28 @@ module "lib.dk"
     {
         postData<"pipeline_id">:@@(params,"pipeline_id")
         if @@(params,"stage_id")!=""{do crm.update_stage(db,params,postData)}
+        else if @@(postData,"#secuences"){do crm.update_stage_secuence(db,params,postData)}
         else{do dbr.execute(db,ftext(@update_pipeline),postData)}
         
         @keyfield="sys_pk"
         return crm.get_pipelines(db,params)
+    }
+
+    #!
+    crm.update_stage_secuence::&db,&params,&postData
+    {
+        ref secuences=@@(postData,"&dataSecuences")
+        
+        for i=0;i<@count(secuences)
+        {
+            secuence=list.str(secuences,i)
+            new p
+            {
+                @"sys_pk":secuence
+                @"sequence":i
+            }
+            do dbr.execute(db,@update_sequences,p)
+        }
     }
 
     #!

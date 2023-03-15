@@ -49,15 +49,15 @@ var views={
     print_stages:function(data)
     {
         var stages="";
-        // for (var i = 0; i<data.length; i++) {
-        //     var d=data[i];
+        if(data!=null)
+        {
             for(var j=0;j<data.stages.length;j++)
             {
                 var stg=data.stages[j];
                 stages+=stage(stg);
             }
-            
-        // }
+        }
+      
 
         var sel=document.querySelector("#conten-padre");
         if(sel)
@@ -79,7 +79,8 @@ var views={
         {
             close.classList.add("hidde_control");
         }
-
+        // views.hide_Allmodule(true);
+        views.view_new(true);
     },
     module_newstage()
     {
@@ -88,6 +89,8 @@ var views={
        
     },
      edit_view:function(data){
+        if(data==null)
+            return;
         var name = document.getElementById("txt_name");
         var sys_pk=document.getElementById("inpu_syspk");
         var probability=document.getElementById("pipeline_probability");
@@ -99,6 +102,8 @@ var views={
     clear_modal:function(){
         var name = document.getElementById("txt_name");
         var sys_pk=document.getElementById("inpu_syspk")
+        var probability=document.getElementById("pipeline_probability");
+        probability.checked=false;
         name.value="";
         sys_pk.value="";
 
@@ -146,6 +151,11 @@ var views={
         var btn_save=document.querySelector(`#${id} #stage-save`);
         var btn_cancel=document.querySelector(`#${id} #stage-cancel`);
         var btn_edit=document.querySelector(`#${id} #stage-edit`);
+        var pipelines=document.querySelector(`#pipelines`);
+
+        var btnedit=document.querySelector(`#btn-edit`);
+        var btnadd=document.querySelector(`#btn-more`);
+        var btndelte=document.querySelector(`.btn-delete`);
 
         if(elements)
         {
@@ -160,11 +170,20 @@ var views={
             if(btn!=null)btn.classList.add("hidde_control");
             if(btn_save && !cancel)btn_save.classList.remove("hidde_control");
             if(btn_cancel && !cancel)btn_cancel.classList.remove("hidde_control");
+            if(pipelines)pipelines.classList.add("p-event-n");
+            if(btnedit)btnedit.classList.add("p-event-n")
+            if(btnadd)btnadd.classList.add("p-event-n")
+            if(btndelte)btndelte.classList.add("p-event-n")
             if(cancel)
             {
                 if(btn_save)btn_save.classList.add("hidde_control");
                 if(btn_cancel)btn_cancel.classList.add("hidde_control");
                 if(btn_edit)btn_edit.classList.remove("hidde_control");
+                if(pipelines)pipelines.classList.remove("p-event-n");
+
+                if(btnedit)btnedit.classList.remove("p-event-n");
+                if(btnadd)btnadd.classList.remove("p-event-n");
+                if(btndelte)btndelte.classList.remove("p-event-n");
             }
         }
     },
@@ -228,9 +247,14 @@ var views={
     ,
     txtchange:function(e,uuid)
     {
+        var input=document.getElementById(e);
         var lbl=document.querySelector(`#lbl${uuid}`);
         if(lbl)
-            lbl.innerHTML=e.value;
+            lbl.innerHTML=input.value;
+
+        input.setAttribute("value",input.value);
+      
+
     },
     addNewStagePosition:function(e,parent)
     {
@@ -280,6 +304,85 @@ var views={
                 }
             }
         }
+    },
+    delete_border:function()
+    {
+        if(list_stages)
+        {
+            for (var i = 0; i <list_stages.childNodes.length; i++) {
+                var parent=list_stages.childNodes[i];
+                if(parent.id!="" && parent.id!="new")
+                {
+                    var head=document.querySelector(`#${parent.id} #head`);
+                    var container=document.querySelector(`#${parent.id} .container1`);
+
+                    head.classList.remove("border-right");
+                    container.classList.remove("border-right");
+                     head.classList.remove("border-left");
+                    container.classList.remove("border-left");
+                }
+                
+
+            }
+        }
+    },
+    save_secuences:function()
+    {
+
+        var list_secuences=[];
+        if(list_stages)
+        {
+            for (var i = 0; i <list_stages.childNodes.length; i++) {
+                var parent=list_stages.childNodes[i];
+                if(parent.id!="" && parent.id!="new")
+                {
+                    var sys_pk=parent.childNodes[1].getAttribute("stage");
+                    list_secuences.push(Number(sys_pk));
+                }
+                
+            }
+        }
+        return list_secuences;
+    },
+    getpositionStageByid(id)
+    {
+        var list_secuences=[];
+        if(list_stages)
+        {
+            for (var i = 0; i <list_stages.childNodes.length; i++) {
+                var parent=list_stages.childNodes[i];
+                if(parent.id!="" && parent.id!="new")
+                {
+                    var idstage=parent.childNodes[1].id;
+                    if(id===idstage)
+                        return i;
+                }
+                
+            }
+        }
+    },
+    hide_Allmodule:function(flag=false)
+    {
+        var m=document.querySelector("#body-first");
+        var n=document.querySelector("#new");
+        var nh=document.querySelector("#new h2");
+        var nb=document.querySelector("#new button");
+        if(flag)
+        {
+            nb.setAttribute("onclick","controller.view_modal(); controller.clear()");
+            nh.innerHTML="Añadir pipeline";
+            nb.innerHTML="Agregar pipeline";
+            m.classList.add("hidde_control");
+            n.setAttribute("pipeline",true);
+        }else{
+            nb.removeAttribute("onclick");
+            nh.innerHTML="Añadir una etapa";
+            nb.innerHTML="Nueva etapa";
+            m.classList.remove("hidde_control");
+            n.removeAttribute("pipeline");
+        }
+        
+
     }
    
 

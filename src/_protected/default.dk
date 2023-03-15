@@ -21,7 +21,7 @@ program
     load_script::
     {
     	scrips=""
-    	files="designer.js,style.css,model.js,views.js,controller.js"
+    	files="style.css"
     	ref files_scrips=split(files,",")
     	for i=0;i<list.count(files_scrips)
     	{
@@ -44,6 +44,7 @@ program
 	{
 		
 		html='<div class="div-first">
+			#<printNav_Bar()>
 			#<content>
 			</div>'//container-fluid
 		
@@ -71,14 +72,18 @@ program
 		                    <img height="25"; src="#<@icon_setting>"/>
 		                </a>')
 		}
+		url_origin=ifstr(@@(@http_context,"request/get/ws")!="",@url_workspace,"/")
 		return ftext('<nav class="navbar_path fixed-top " style="z-index:100000000000">
-			<a class="nav_a" title="home" href="/"> <img src="#<@icon_home>"></a>
+			<a class="nav_a" title="home" href="#<url_origin>"> <img src="#<@icon_home>"></a>
 			'+get_address(@@(@http_context,"&session/address_workspaces"))+'
 	        <div id="a_logout">
 	        	#<@@(@http_context,"session/user/name")>
 	        	#<setting>
-	            <a title="Cerrar sesión" href="https://api.induxsoft.net/auth/logout/?ids=#<@@(@http_context,"session/user/ids")>&url=#<url_encode(current_url(@true))>" id="a_logout1">
-	                <i style="font-size:20px;" class="fas fa-sign-out-alt" "aria-hidden"="true" id="btn-logout"></i>
+	            <a style="color:black;font-size: 20px;" title="Cerrar sesión" href="https://api.induxsoft.net/auth/logout/?ids=#<@@(@http_context,"session/user/ids")>&url=#<url_encode(@url_workspace)>" id="a_logout1">
+	                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+					  <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+					  <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+					</svg>
 	            </a>
 	        </div></nav><br>
 	        <style>

@@ -13,6 +13,7 @@ module "config"
 	if not(file.exists(@icon_home)){@icon_home="https://ws.induxsoft.net/icons/home.icon.png"}
 	//lisnk del icono setting de la barra de navegacion
 	@icon_setting=protocol+"://"+host+"/icons/settings.icon.png"
+	@url_workspace="https://ws.induxsoft.net/"
 	//lenguaje por default que va colocado en el contenido html
 	@lang="es-MX"
 	@toc_file=""

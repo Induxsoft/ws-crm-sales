@@ -9,7 +9,7 @@ module "lista de consultas"
 	@list_pipelines="select * from sales_pipeline order by name desc"
 	@get_pipeline="select * from sales_pipeline where #<@keyfield>=@pipeline_id"
 	@list_stages="select * from sales_pipeline_stage "
-	@get_stage="select * from sales_pipeline_stage where #<@keyfield>=@stage_id"
+	@get_stage="select * from sales_pipeline_stage where #<@keyfield>=@stage_id order by sequence"
 
 	//Varibles para realizar la sentencia insert
 	@insert_pipeline="insert into sales_pipeline values(0,#<@fields_system>,@name,@probability)"
@@ -19,7 +19,7 @@ module "lista de consultas"
 	
 	@update_pipeline="update sales_pipeline set name=@name,probability=@probability where #<@keyfield>=@pipeline_id"
 	@update_stage="update sales_pipeline_stage set name=@name,probability=@probability,stuck_in_days=@stuck_in_days where #<@keyfield>=@pipeline_id and sys_pk=@stage_id"
-
+	@update_sequences="update sales_pipeline_stage set sequence=@sequence where sys_pk=@sys_pk"
 
 	@delete_stage="delete from sales_pipeline_stage where ref_pipeline=@pipeline_id and sys_pk=@stage_id"
 	@delete_pipeline="delete from sales_pipeline where #<@keyfield>=@pipeline_id"

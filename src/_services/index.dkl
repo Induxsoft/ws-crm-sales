@@ -19,6 +19,8 @@ module "index.dkl"
 	go api_base_service (responseJSONdata:response) 
 	{
 		method=@@(@http_context,"request/headers/REQUEST_METHOD")
+		auth=@@(@http_context,"$request/headers/http_Authorization")
+
 		ref params=@@(@http_context,"&request/get")
 		ref postData=@@(@http_context,"&request/post")
 
@@ -26,8 +28,15 @@ module "index.dkl"
 		{
 			ref postData=from.json(field.dstr(@http_context,"request/post_string","{}"))
 		}
+		
+		if not(@use_bdconfig)
+		{
+			ref dataws=parse.authorization(auth)
+			qname=@qname_prefix+"ws"+@@(dataws,"ws")+"@"+@qname_app
+		}
+		else{qname=""}
 
-		ref db=open.db("")
+		ref db=open.db(qname)
 
 		switch method
 		{

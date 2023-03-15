@@ -29,10 +29,16 @@ var controller={
 	get_pipelines:function(id,data) {
 		var uri=`${url}crm/sales/pipeline/`;
         model.invoke_service(uri,null,function(data) {
+
           views.select("#pipelines",data);
           views.print_stages(data[0]);
           views.edit_view(data[0]);
           views.disable_enable_stages();
+
+          if(data[0]==null)
+          {
+            views.hide_Allmodule(true);
+          }
         },
         function(error) {
           alert(error.message);
@@ -72,19 +78,25 @@ var controller={
 	var uri=`${url}crm/sales/pipeline/${pipeline_id.value}`;
 	        model.invoke_service(uri,data,function(data) {
 	          controller.close_modal();
-	          views.appendOption("#pipelines",data);
-	          views.edit_view(data);
+            if(method=="POST")
+	           views.appendOption("#pipelines",data);
+           views.hide_Allmodule();
+	          views.edit_view(data[0]);
 	        },
 	        function(error) {
 	          alert(error.message);
 	        },method,false);
 	},
-  delete:function()
+  view_modal:function(id="user_modal",edit=false)
   {
-
-  },
-  view_modal:function(id="user_modal")
-  {
+    if(edit)
+    {
+      if(idpipeline.value=="")
+      {
+        alert("Seleccione un pipeline.");
+        return;
+      }
+    }
     controller.show_modal(id);
   },
   show_modal:function(idmodal)
@@ -109,7 +121,12 @@ var controller={
     },
     delete:function()
     {
-      
+      if(idpipeline.value=="")
+      {
+        alert("Seleccione un pipeline.");
+        return;
+      }
+
       if (!confirm('Este proceso eliminará todos sus dependencias ¿Continuar?'))
       return;
 
@@ -120,6 +137,10 @@ var controller={
       	{
       		views.print_stages(data[0]);
         	views.edit_view(data[0]);
+          if(data[0]==null)
+          {
+            views.hide_Allmodule(true);
+          }
       	}
         
       },
@@ -233,7 +254,7 @@ var controller={
 		var check=elements[2];
 		var data=
 		{
-			sequence:0,
+			sequence:views.getpositionStageByid(stage.id),
 			name:input.value,
 			probability:inp_prob.value,
 			stuck_in_days:check.checked
@@ -257,7 +278,8 @@ var controller={
 		var data=data_pipeline;
         
         model.invoke_service(uri,data,function(data) {
-          // views.print_stages(data[0]);
+          controller.save_secuences(true);
+          
           views.edit_view(data[0]);
           views.edit_stage(id,null,true);
           views.view_new(true);
@@ -308,9 +330,41 @@ var controller={
     	views.parent_select(uuid);
     },
     in_modify:function(value=false){is_modify=value;},
+    save_secuences:function(struc=false)
+    {
+      if(!struc)
+      {
+         if (!is_sequence_dirty) return;
+          if (timeout_save_sequence>0)
+          {
+              timeout_save_sequence--;
+              return;
+          }
+      }
+     
+      if(idpipeline.value=="")
+      {
+        alert("Seleccione un pipeline.");
+        return;
+      }
+      var data={
+        dataSecuences:views.save_secuences(),
+        secuences:true
+      }
+      var uri=`${url}crm/sales/pipeline/${idpipeline.value}/stages/`;
+      model.invoke_service(uri,data,function(data) {
+          
+        },
+        function(error) {
+          alert(error.message);
+        },"PATCH",false);
+
+      timeout_save_sequence=max_tmss;
+      is_sequence_dirty=false;
+    },
     verify_modify:function(){
-    	if(is_modify)
-    		alert("Inicio un proceso pero no fue finalizada, debe terminar el proceso.");
-    	return is_modify;
+    	// if(is_modify)
+    	// 	alert("Inicio un proceso pero no fue finalizada, debe terminar el proceso.");
+    	// return is_modify;
     }
 }

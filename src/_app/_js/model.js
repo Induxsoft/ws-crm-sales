@@ -1,5 +1,5 @@
 
-var url="";
+var url=end_point_service;
 var model={
 	 invoke_service:function(url,params,callback_success, callback_fail, http_method,reload=true,async=true) {
           if (!http_method) http_method="POST";
@@ -10,7 +10,7 @@ var model={
               contentType:"application/json;charset=utf-8;",
               async:async,
               crossDomain: true,
-              // headers:{'admin':ws},
+              headers:{'Authorization':autorizations},
               success: function(r){
                   var res = JSON.parse(JSON.stringify(r));
                   if (res.success)

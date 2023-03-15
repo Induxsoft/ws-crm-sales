@@ -1,35 +1,13 @@
 var text_="Este valor representa la confianza que tienes en ganar el trato para la fecha de cierre prevista. La probabilidad puede asignarse por trato o etapa del embudo, y se utiliza para planificar tus ingresos futuros. La probabilidad por defecto para cada etapa es del 100%, pero puedes asignar cualquier valor entre 0% y 100%.";
 var tilte="Probabilidad de ganar";
 
-// $(window).bind('unload', function(){
-//   messageUnLoad();
-// });       
-// $(window).on('beforeunload',function(e){
- 
-// });
-
-//   $(window).on('unload',function(){
-//    // messageUnLoad();
-//   });    
-
 
   $( document ).ready(function() {
-    window.history.replaceState('page', '');
-        $(window).on('popstate', function() {
-            console.log(is_modify)
-          if(!controller.verify_modify()){
+    setInterval(function() {controller.save_secuences()},100);
 
-            window.history.pushState('forward', null, './#forward');
-
-            console.log("akii 1")
-          }
-            else{
-                window.history.pushState({},"");
-                console.log("akii")
-            }
-        });
 }); 
-$(document).ready(function(){
+$(document).ready(function()
+{
                 const divItem = document.getElementById("form");
                 const divItem2 = document.getElementById("head");
                 const divItem3 = document.getElementById("icon-mas");
@@ -43,17 +21,6 @@ $(document).ready(function(){
                     divClick()
                 });
 
-                 initControls();
-
-                 function initControls(){
-                    window.location.hash="no-back-button";
-                    window.location.hash="Again-No-back-button";//esta linea es necesaria para chrome
-                    // window.onhashchange=function(){alert()}
-                }
-                 function messageUnLoad()
-                 {
-                    alert("11111");
-                 }
                
                  $(".nuevo").click(function(){
                     newstage(this);
@@ -87,6 +54,9 @@ $(document).ready(function(){
 
  function newstage(e)
 {
+    if(e.hasAttribute("pipeline"))
+        return;
+
     var t=e;
     
     var list_stages=document.getElementById("conten-padre");
@@ -103,27 +73,60 @@ function onDragStart(event,id) {
     .dataTransfer
     .setData('text/plain', id);
 
+    views.delete_border();
+
     // event
     // .currentTarget
     // .style
     // .backgroundColor = 'yellow';
 }
-function onDragOver(event) {
+function onDragOver(event,iddest) {
   event.preventDefault();
+
+  const obj = document.getElementById(iddest);
+  const rec=obj.getBoundingClientRect();
+  const limit=rec.x+(rec.width/2);
+
+  var head=document.querySelector(`#${iddest} #head`);
+  var container=document.querySelector(`#${iddest} .container1`);
+  
+    views.delete_border();
+    if (event.clientX<limit)
+    {
+        head.classList.add("border-left");
+        container.classList.add("border-left");
+        positionEvent="beforebegin";
+    }
+    else{
+        head.classList.add("border-right");
+        container.classList.add("border-right");
+        positionEvent="afterend";
+    }
+
 }
+var positionEvent="afterend";
+
+const max_tmss=10;
+var timeout_save_sequence=max_tmss;
+var is_sequence_dirty=false;
+
 function onDrop(event,iddest) {
   const id = event
     .dataTransfer
     .getData('text');
 
-    console.log(id)
+  views.delete_border();
+
+  is_sequence_dirty=true;
+    timeout_save_sequence=max_tmss;
+
     const draggableElement = document.getElementById(id);
     var Elementohtml=draggableElement.outerHTML;
     const dropzone = document.getElementById(iddest);
 
     //dropzone.appendChild(draggableElement);
     dropzone.style.border_left="2px solid green";
-    dropzone.insertAdjacentHTML("afterend",Elementohtml);
+    dropzone.insertAdjacentHTML(positionEvent,Elementohtml);
 
     event
     .dataTransfer
@@ -146,7 +149,7 @@ function stage(data=null,showcancel=true)
                         controller.in_modify(true);
 
                     var uuid="stg"+controller.guid();
-                    return `<div id="parent_${uuid}" ondrop="onDrop(event,'parent_${uuid}');" ondragstart="onDragStart(event,'parent_${uuid}');" ondragover="onDragOver(event);" onclick="controller.parent_select('#${uuid}',event)">
+                    return `<div class="height-55" id="parent_${uuid}" ondrop="onDrop(event,'parent_${uuid}');" ondragstart="onDragStart(event,'parent_${uuid}');" ondragover="onDragOver(event,'parent_${uuid}');" onclick="controller.parent_select('#${uuid}',event)">
                     <div class="container-pruebas ${uuid}" id="${uuid}" stage="${data.sys_pk}"  >
                     <div class="head" draggable="true" id="head"  >
                     <icons class="icon-mas ${data.sys_pk==0 ? "hidde_control":""}" id="icon-mas" position="before" onclick="views.addNewStagePosition(this,'parent_${uuid}')">
@@ -181,7 +184,7 @@ function stage(data=null,showcancel=true)
                         <div class="letras">
                             <label for="" class="label">Nombre</label>
                             <br>
-                            <input class="inputs" onkeypress="views.txtchange(this,'${uuid}')" type="text" placeholder="Cualificado" value="${data.name}" maxlength="50"><br><br><br>
+                            <input class="inputs" onkeyup="views.txtchange('input${uuid}','${uuid}')" id="input${uuid}" type="text" placeholder="Cualificado" value="${data.name}" maxlength="50"><br><br><br>
                             <label for="" class="label">Probabilidad</label>
                             ${views.message(uuid,"prob")}
                             <br>

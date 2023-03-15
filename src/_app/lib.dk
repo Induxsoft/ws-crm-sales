@@ -1,0 +1,27 @@
+#include "dkli.dkh"
+#!
+module "lib"
+{
+	#!
+	address_workspace::
+	{
+		if not(field.exist(@http_context,"session")){@http_context<"session*">:record.create()}
+
+		ref listobj=list.create()
+		new address
+		{
+			@"type":"Workspace"
+			@"target":@url_workspace+@@(@http_context,"request/get/ws")
+			@"link":@@(@http_context,"request/get/namews")
+		}
+		new address1
+		{
+			@"type":"Pipelines"
+			@"target":""
+			@"link":"Pipelines"
+		}
+		do list.add(listobj,address)
+		do list.add(listobj,address1)
+		@http_context<"session/address_workspaces*">:listobj
+	}
+}
